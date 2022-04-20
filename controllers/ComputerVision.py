@@ -4,6 +4,8 @@ import uuid
 import threading
 import time
 import tkinter as Tk
+from os import listdir
+from os.path import isfile, join
 
 videoshared = []
 frameshared = 1
@@ -185,7 +187,7 @@ def procesarvideo(estudioId,cb,cbmax):               #funcionalidad principal de
                 event = shape_to_event(shape)                   #paso de shape a evento (vector de coordenadas)
                 vectoreventos.append(event)         
                 frame = Frame()
-                frame.nFrame = index
+                frame.nFrame = index         
                 frame.estudio = estudio    
                 for point in event:                               #recorro la forma -> cada ciclo corresponde a un punto
                     #print(point)                          #muestro por consola las coordenadas de cada punto procesado
@@ -220,3 +222,28 @@ def procesarvideo(estudioId,cb,cbmax):               #funcionalidad principal de
         # return video,vectoreventos                              #retorno el video nuevo con los puntos dibujados, y el vector de eventos para
                                                             #despues procesar los gestos
 
+def procesarimagen( folder_path ) :
+    files = [f for f in listdir( folder_path ) if isfile( join( folder_path, f ) ) ]
+    
+    detector = worker.get_frontal_face_detector()
+    predictor = worker.shape_predictor("assets/sp_68.dat")
+    
+    for index_image, f_url in enumerate(files):
+        print(index_image)
+        image = vision.imread(join(folder_path,f_url))
+        # print(image)
+        gray = vision.cvtColor(image,vision.COLOR_BGR2GRAY)
+        gray = vision.equalizeHist(gray)
+
+        dets = detector(gray,1)
+        for face in dets:
+            shape = predictor(gray,face)
+            event = shape_to_event(shape)
+
+            for index_point, point in enumerate(event):
+                
+
+
+
+
+    return files
