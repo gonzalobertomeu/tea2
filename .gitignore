@@ -1,0 +1,11 @@
+*.avi
+*.cpython-36.pyc
+*.dat
+*.mp4
+__pycache__
+estudios/
+assets/
+csv/
+editedfaces/
+faces/
+tmp/
